@@ -23,10 +23,9 @@ public class InitializeTransferResponse {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Data{
+    public class Data{
         @JsonProperty("reference")
         private String reference;
         @JsonProperty("integration")

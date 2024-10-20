@@ -22,7 +22,7 @@ public class User {
     private String email;
     @OneToOne(cascade = CascadeType.ALL)
     private Wallet wallet;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Transaction> transactionHistories;
    private DateCreated dateCreated;
 }

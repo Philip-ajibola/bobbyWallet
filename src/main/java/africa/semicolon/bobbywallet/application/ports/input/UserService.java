@@ -14,7 +14,7 @@ public interface UserService {
     String deleteUser(Long userId);
     InitializePaymentResponse deposit(InitializePaymentDto request, PaymentService paymentService);
     InitializeTransferResponse transfer(TransferDto request, PaymentService paymentService);
-    List<TransactionResponse> allTransaction(Long userId);
+    List<TransactionResponse> viewAllTransactions(Long userId);
     TransactionResponse viewTransaction(Long transactionId);
     User getUser(Long id);
 }

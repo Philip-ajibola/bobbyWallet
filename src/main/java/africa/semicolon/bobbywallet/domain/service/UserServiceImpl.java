@@ -93,7 +93,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<TransactionResponse> allTransaction(Long userId) {
+    public List<TransactionResponse> viewAllTransactions(Long userId) {
+        getUser(userId);
         return transactionService.viewAllTransaction(userId);
     }
 
