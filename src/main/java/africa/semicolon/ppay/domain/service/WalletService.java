@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
-public class gitWalletService implements CreateWalletUseCase, DepositUseCase, FindByIdUseCase,
+public class WalletService implements CreateWalletUseCase, DepositUseCase, FindByIdUseCase,
         TransferUseCase, ExistByIdUseCase,ChangePinUseCase,VerifyTransferUseCase,VerifyPaymentUseCase {
 
     private  PayStackPaymentService payStackPaymentService;
