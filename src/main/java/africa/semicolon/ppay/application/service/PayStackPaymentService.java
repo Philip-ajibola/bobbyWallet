@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
 import africa.semicolon.ppay.application.ports.input.paystackUseCase.*;
 import africa.semicolon.ppay.application.ports.output.PayStackPaymentOutputPort;
@@ -9,7 +9,6 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.CreateTran
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.InitializePaymentDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.InitializeTransferDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.*;
-import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.PayStackPaymentEntityRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import jakarta.transaction.Transactional;
@@ -19,17 +18,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import static africa.semicolon.ppay.domain.constant.PayStackAPIConstant.*;
+import static africa.semicolon.ppay.infrastructure.utils.HelperClass.bufferReader;
 
 public class PayStackPaymentService implements CreateRecipientUseCase, InitializePaymentUseCase, InitializeTransferUseCase, VerifyTransferUseCase, VerifyPaymentUseCase {
     @Value("${paystack.api.key}")
@@ -77,8 +73,7 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
             HttpResponse response = client.execute(request);
 
             if (response.getStatusLine(). getStatusCode() == STATUS_CODE_OK) {
-
-                bufferReader(response, result);
+                result = bufferReader(response, result);
             } else {
                 result =  bufferReader(response, result);
                 throw new PPayWalletException(result.toString());
@@ -87,7 +82,7 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
 
 
             if( paymentVerificationResponse == null || !paymentVerificationResponse.isStatus()) {
-                throw new PPayWalletException("An error");
+                throw new PPayWalletException("An error occur: " + paymentVerificationResponse.getMessage());
             } else if (paymentVerificationResponse.isStatus()) {
 
                 paymentPaystack = createPaymentModel(id, paymentVerificationResponse);
@@ -99,15 +94,7 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
         return paymentVerificationResponse;
     }
 
-    private static StringBuilder bufferReader(HttpResponse response, StringBuilder result) throws IOException {
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String line;
 
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
-        }
-        return result;
-    }
 
 
     private HttpGet createHeader(String url,String reference) {

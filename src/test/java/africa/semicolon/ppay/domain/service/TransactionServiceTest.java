@@ -1,12 +1,12 @@
 package africa.semicolon.ppay.domain.service;
 
+import africa.semicolon.ppay.application.service.TransactionService;
+import africa.semicolon.ppay.application.service.WalletService;
 import africa.semicolon.ppay.domain.exception.TransactionNotFoundException;
-import africa.semicolon.ppay.domain.exception.UserNotFoundException;
 import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Transaction;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -38,11 +38,11 @@ class TransactionServiceTest {
 
     @Test
     void viewAllTransactions() {
-        List<Transaction> transactions = transactionService.viewAllTransactions(101L,walletService);
+        List<Transaction> transactions = transactionService.viewAllTransactions(101L);
         assertThat(transactions.size()).isEqualTo(4);
     }
     @Test
     public void testThatWhenTryingFindAllTransactionsForInValidUserExceptionIsThrown(){
-        assertThrows(WalletNotFoundException.class,() -> transactionService.viewAllTransactions(107L,walletService));
+        assertThrows(WalletNotFoundException.class,() -> transactionService.viewAllTransactions(107L));
     }
 }

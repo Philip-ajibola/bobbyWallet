@@ -2,14 +2,10 @@ package africa.semicolon.ppay.infrastructure.adapter.output.persistenceAdapter;
 
 import africa.semicolon.ppay.application.ports.output.TransactionOutputPort;
 import africa.semicolon.ppay.domain.exception.TransactionNotFoundException;
-import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Transaction;
-import africa.semicolon.ppay.domain.service.WalletService;
 import africa.semicolon.ppay.infrastructure.adapter.output.mappers.EntityMappers;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities.TransactionEntity;
-import africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities.UserEntity;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.TransactionEntityRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -35,8 +31,7 @@ public class TransactionPersistenceAdapter implements TransactionOutputPort {
     }
 
     @Override
-    public List<Transaction> getAllTransactions(Long walletId, @Autowired WalletService walletService) {
-        if(!walletService.existById(walletId)) throw new WalletNotFoundException(String.format("Transaction with %s not found",walletId));
+    public List<Transaction> getAllTransactions(Long walletId) {
         List<TransactionEntity> transactionEntities = transactionEntityRepo.findAllTransactionsBy(walletId);
         return transactionEntities.stream().map(TransactionEntity->EntityMappers.INSTANCE.toModel(TransactionEntity)).toList();
     }

@@ -1,0 +1,40 @@
+#version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: wallet_db
+    environment:
+      POSTGRES_DB: wallet_db
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - keycloak-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: wallet_application_keycloak
+    environment:
+      KEYCLOAK_ADMIN: ${KEY_CLOAK_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEY_CLOAK_PASSWORD}
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    command: start-dev
+    networks:
+      - keycloak-network
+
+networks:
+  keycloak-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

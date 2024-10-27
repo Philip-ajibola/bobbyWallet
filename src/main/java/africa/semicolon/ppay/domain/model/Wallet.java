@@ -20,4 +20,11 @@ public class Wallet {
     private String pin;
     private BigDecimal balance ;
     private DateCreated dateCreated;
+
+    public void deposit(BigDecimal amount){
+        this.balance.add(amount);
+    }
+    public void transfer(BigDecimal amount){
+        this.balance.subtract(amount);
+    }
 }

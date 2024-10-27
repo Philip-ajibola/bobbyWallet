@@ -10,4 +10,6 @@ import java.util.List;
 public interface TransactionEntityRepo extends JpaRepository<TransactionEntity,Long> {
     @Query("SELECT T FROM TransactionEntity T WHERE T.wallet.id =:walletId")
     List<TransactionEntity> findAllTransactionsBy(Long walletId);
+    @Query("SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM WalletEntity w WHERE w.id = :walletId")
+    boolean existsByWalletId(Long walletId);
 }

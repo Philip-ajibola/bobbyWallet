@@ -1,7 +1,10 @@
 package africa.semicolon.ppay.domain.service;
 
+import africa.semicolon.ppay.application.service.UserService;
 import africa.semicolon.ppay.domain.exception.UserNotFoundException;
 import africa.semicolon.ppay.domain.model.User;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
@@ -9,6 +12,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,13 +25,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Sql(scripts = {"/db/data.sql"})
+@Slf4j
 class UserServiceTest {
     @Autowired
     private UserService userService;
 
     @Test
     void testThatUserCanBeDeleted() {
-        userService.delete(101L);
+        userService.delete(103L);
         assertThrows(UserNotFoundException.class,()->userService.findById(101L));
     }
 
@@ -42,6 +47,16 @@ class UserServiceTest {
     void testThatUserCantBeFoundWithInvalidId() {
         assertThrows(UserNotFoundException.class,()->userService.findById(107L));
     }
+    @Test
+    public void testThatUserCanLogin(){
+        LoginRequest request = new LoginRequest();
+        request.setEmail("ajibola@gmail.com");
+        request.setPassword("password");
+        LoginResponse response = userService.login(request);
+        assertNotNull(response);
+        assertNotNull(response.getAccessToken());
+        log.info("User {}",response);
+    }
 
     @Test
     void testThatUserCanBeUpdated() throws JsonPointerException, JsonPatchException {
@@ -49,8 +64,13 @@ class UserServiceTest {
                 new ReplaceOperation(new JsonPointer("/firstname"),new TextNode("James"))
         );
         JsonPatch request = new JsonPatch(operations);
-        User user =  userService.updateUser(101L,request);
+        User user =  userService.updateUser(103L,request);
         assertThat(user.getFirstname()).isEqualTo("James");
-
+    }
+    @Test
+    void testThatUserCanBeFoundUsingEmail(){
+        User user = userService.findByEmail("johndoe@example.com");
+        assertNotNull(user);
+        assertThat(user.getFirstname()).isEqualTo("John");
     }
 }

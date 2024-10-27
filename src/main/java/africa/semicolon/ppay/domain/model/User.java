@@ -17,6 +17,8 @@ public class User {
     private String firstname;
     private String lastname;
     private String password;
+    private String phoneNumber;
+    private String keyCloakId;
     private String email;
     private Wallet wallet;
     private List<Transaction> transactionHistories;

@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
 import africa.semicolon.ppay.application.ports.input.walletUseCase.*;
 import africa.semicolon.ppay.application.ports.output.WalletOutputPort;
@@ -11,7 +11,6 @@ import africa.semicolon.ppay.domain.model.Wallet;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.*;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.*;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
@@ -105,9 +104,9 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     @Override
     public Wallet verifyTransfer(VerifyPaymentDto dto) {
         TransferVerificationResponse response = payStackPaymentService.transferVerification(dto.getReference(), dto.getId());
-        createTransferTransaction(response,dto.getId());
         Wallet wallet = findById(dto.getId());
-        wallet.setBalance(wallet.getBalance().subtract(dto.getAmount()));
+        wallet.transfer(dto.getAmount());
+        createTransferTransaction(response,dto.getId());
         return walletOutputPort.saveWallet(wallet);
     }
 
@@ -115,8 +114,9 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     public Wallet verifyPayment(VerifyPaymentDto verifyPaymentDto) {
         PaymentVerificationResponse paymentVerificationResponse = payStackPaymentService.paymentVerification(verifyPaymentDto.getReference(), verifyPaymentDto.getId());
         Wallet wallet = findById(verifyPaymentDto.getId());
-        wallet.setBalance(wallet.getBalance().add(verifyPaymentDto.getAmount()));
+        wallet.deposit(verifyPaymentDto.getAmount());
         wallet = walletOutputPort.saveWallet(wallet);
+        createDepositTransaction(paymentVerificationResponse,wallet);
         return wallet;
     }
 }

@@ -1,5 +1,6 @@
 package africa.semicolon.ppay.domain.service;
 
+import africa.semicolon.ppay.application.service.WalletService;
 import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Wallet;
 import org.junit.jupiter.api.Test;

@@ -45,4 +45,11 @@ public class UserPersistenceAdapter implements UserOutputPort {
     public boolean existsById(Long id) {
         return userEntityRepo.existsById(id);
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        UserEntity userEntity = userEntityRepo.findUserEntityByEmail(email).orElseThrow(()->new UserNotFoundException("User Not Found"));
+        User user = EntityMappers.INSTANCE.toModel(userEntity);
+        return user;
+    }
 }

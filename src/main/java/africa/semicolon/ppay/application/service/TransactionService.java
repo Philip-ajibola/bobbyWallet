@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.SaveTransactionUseCase;
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewASingleTransactionUseCase;
@@ -27,7 +27,7 @@ public class TransactionService implements SaveTransactionUseCase, ViewAllTransa
     }
 
     @Override
-    public List<Transaction> viewAllTransactions(Long userId, @Autowired WalletService walletService) {
-        return transactionOutputPort.getAllTransactions(userId,walletService);
+    public List<Transaction> viewAllTransactions(Long userId) {
+        return transactionOutputPort.getAllTransactions(userId);
     }
 }

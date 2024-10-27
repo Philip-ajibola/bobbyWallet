@@ -8,4 +8,6 @@ public interface UserOutputPort {
     void delete(Long id);
     void delete(User user);
     boolean existsById(Long id);
+
+    User findUserByEmail(String email);
 }

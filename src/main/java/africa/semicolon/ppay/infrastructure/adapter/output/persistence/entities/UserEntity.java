@@ -24,6 +24,8 @@ public class UserEntity {
     private String firstname;
     private String lastname;
     private String password;
+    private String phoneNumber;
+    private String keyCloakId;
     private String email;
     @OneToOne(cascade = CascadeType.ALL)
     private WalletEntity wallet;

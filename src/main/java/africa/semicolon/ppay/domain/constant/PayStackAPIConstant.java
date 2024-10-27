@@ -9,4 +9,5 @@ public class PayStackAPIConstant {
     public static final String PAYSTACK_VERIFY = "https://api.paystack.co/transaction/verify/";
     public static final String PAYSTACK_VERIFY_TRANSFER = "https://api.paystack.co/transfer/verify/";
     public static final String PAYSTACK_INITIALIZE_PAY = "https://api.paystack.co/transaction/initialize";
+    public static final String PREMBLY_VERIFY_WITH_NIN="https://api.prembly.com/identitypass/verification/nin_w_face";
 }
