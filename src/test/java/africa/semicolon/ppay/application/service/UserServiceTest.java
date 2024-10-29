@@ -1,6 +1,5 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
-import africa.semicolon.ppay.application.service.UserService;
 import africa.semicolon.ppay.domain.exception.UserNotFoundException;
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;

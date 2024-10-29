@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class BeanConfig {
@@ -90,6 +91,14 @@ public class BeanConfig {
                 .clientSecret(clientSecret)
                 .grantType("client_credentials")
                 .build();
+    }
+    @Bean
+    public MonifyUserService monifyUserService(WebClient webClient){
+        return new MonifyUserService(webClient);
+    }
+    @Bean
+    public WebClient webClient(){
+        return  WebClient.builder().build();
     }
 
 

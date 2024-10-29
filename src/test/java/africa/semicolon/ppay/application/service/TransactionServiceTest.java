@@ -1,7 +1,5 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
-import africa.semicolon.ppay.application.service.TransactionService;
-import africa.semicolon.ppay.application.service.WalletService;
 import africa.semicolon.ppay.domain.exception.TransactionNotFoundException;
 import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Transaction;

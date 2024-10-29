@@ -1,6 +1,5 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.application.service;
 
-import africa.semicolon.ppay.application.service.PremblyIdentityVerificationService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyUserIdentityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

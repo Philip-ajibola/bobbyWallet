@@ -54,12 +54,6 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
         }
         return initializePaymentResponse;
     }
-//    private WalletResponse deposit(BigDecimal amount, Long id, @Autowired WalletService service) {
-//        Wallet wallet = service.findById(id);
-//        wallet.setBalance(wallet.getBalance().add(amount.divide(BigDecimal.valueOf(100))));
-//        wallet = service.save(wallet);
-//        return  mapper.map(wallet, WalletResponse.class);
-//    }
 
 
     @Override
@@ -130,15 +124,8 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
                 throw new PPayWalletException("Paystack is unable to verify payment at the moment");
             }
             transferVerificationResponse = objectMapper.readValue(result.toString(), TransferVerificationResponse.class);
-//            transfer(transferVerificationResponse.getData().getAmount(),id,service);
-//            Transaction transaction = new Transaction();
-//            transaction.setAmount(transferVerificationResponse.getData().getAmount());
-//            transaction.setWallet(service.findById(id));
-//            transaction.setTransactionType(TransactionType.TRANSFER);
-//            transaction.setStatus(transferVerificationResponse.getStatus().equals("true")? TransactionStatus.SUCCESSFUL : TransactionStatus.FAILED);
-//            transactionService.save(transaction);
 
-            if( transferVerificationResponse == null || transferVerificationResponse.isStatus()) {
+            if( transferVerificationResponse == null || !transferVerificationResponse.isStatus()) {
                 throw new Exception("An error");
             } else if (transferVerificationResponse.isStatus()) {
                 paymentPaystack = createPaymentModel(id, transferVerificationResponse);

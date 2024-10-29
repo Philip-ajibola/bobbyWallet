@@ -57,4 +57,9 @@ public class WalletController {
         WalletResponse  response= DtoMappers.INSTANCE.toWalletResponse(wallet);
         return  ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("SuccessFul", response,true));
     }
+    @GetMapping("/pay_completed")
+    public String payCompleted(){
+        return "<h1>Payment Completed</h1>";
+    }
+
 }

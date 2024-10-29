@@ -74,7 +74,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
     httpSecurity
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/v1/users/register","/api/v1/users/login").permitAll()
+                    .requestMatchers("/api/v1/users/register","/api/v1/users/login","/api/v1/wallet/pay_completed").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
