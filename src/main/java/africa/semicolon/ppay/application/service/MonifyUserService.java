@@ -1,5 +1,6 @@
 package africa.semicolon.ppay.application.service;
 
+import africa.semicolon.ppay.application.ports.input.monifyUseCase.AuthorizeTransferUseCase;
 import africa.semicolon.ppay.application.ports.input.monifyUseCase.InitializePaymentUseCase;
 import africa.semicolon.ppay.application.ports.input.monifyUseCase.TransferUseCase;
 import africa.semicolon.ppay.application.ports.input.monifyUseCase.VerifyPaymentUseCase;
@@ -10,7 +11,6 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.AuthorizeR
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.MonifyInitializeTransferDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -31,7 +31,7 @@ import java.util.Base64;
 import static africa.semicolon.ppay.domain.constant.MonifyApiConstant.*;
 
 @Slf4j
-public class MonifyUserService  implements InitializePaymentUseCase, VerifyPaymentUseCase, TransferUseCase {
+public class MonifyUserService  implements InitializePaymentUseCase, VerifyPaymentUseCase, TransferUseCase, AuthorizeTransferUseCase {
     @Value("${monify.api.key}")
     private String MONIFY_API_KEY;
     @Value("${monify.api.secret}")
@@ -87,51 +87,6 @@ public class MonifyUserService  implements InitializePaymentUseCase, VerifyPayme
         }catch (JsonProcessingException e){
             throw new PPayWalletException("Error: " + e.getMessage());
         }
-    }
-
-    // Initiating a payment transaction
-//public String initiateTransaction(String token, double amount, String customerName, String customerEmail, String paymentReference) throws Exception {
-//    String url = INITIATE_TRANSACTION;
-//    CloseableHttpClient client = HttpClients.createDefault();
-//    HttpPost httpPost = new HttpPost(url);
-//
-//    // Set the Bearer token
-//    httpPost.setHeader("Authorization", "Bearer " + token);
-//    httpPost.setHeader("Content-Type", "application/json");
-//
-//    // Create the JSON payload
-//    String jsonPayload = "{"
-//            + "\"amount\": " + amount + ","
-//            + "\"customerName\": \"" + customerName + "\","
-//            + "\"customerEmail\": \"" + customerEmail + "\","
-//            + "\"paymentReference\": \"" + paymentReference + "\","
-//            + "\"paymentDescription\": \"Payment for services\","
-//            + "\"currencyCode\": \"NGN\","
-//            + "\"contractCode\": \"" + "7868604733" + "\","
-//            + "\"redirectUrl\": \"http://localhost:8085/api/v1/wallet/pay_completed\""
-//            + "}";
-//
-//    // Attach the JSON payload
-//    StringEntity entity = new StringEntity(jsonPayload);
-//    httpPost.setEntity(entity);
-//
-//    // Execute the request
-//    HttpResponse response = client.execute(httpPost);
-//    String jsonResponse = EntityUtils.toString(response.getEntity());
-//
-//    // Log the JSON response for debugging
-//    System.out.println("Response JSON: " + jsonResponse);
-//
-//    // Parse the response to get the payment URL
-//    String paymentUrl = parseJsonResponseForPaymentUrl(jsonResponse);
-//
-//    client.close();
-//    return paymentUrl;
-//}
-    public String parseJsonResponseForPaymentUrl(String jsonResponse) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode node = objectMapper.readTree(jsonResponse);
-        return node.get("responseBody").get("checkoutUrl").asText();
     }
 
     public MonifyVerifyTransactionResponse verifyTransaction(String reference){
