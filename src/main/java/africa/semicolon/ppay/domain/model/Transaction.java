@@ -23,7 +23,6 @@ public class Transaction {
     private Wallet wallet;
     private TransactionType transactionType;
     private BigDecimal amount;
-    @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime dateCreated;

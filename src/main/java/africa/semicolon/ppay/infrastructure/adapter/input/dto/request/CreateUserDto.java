@@ -19,4 +19,6 @@ public class CreateUserDto {
     private String email;
     @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
+    @NotBlank(message = "User role is mandatory")
+    private String role;
 }

@@ -9,6 +9,8 @@ import africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities.
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.UserEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static java.time.LocalDateTime.now;
+
 public class UserPersistenceAdapter implements UserOutputPort {
     private final UserEntityRepo userEntityRepo;
     public UserPersistenceAdapter(UserEntityRepo userEntity) {
@@ -26,7 +28,6 @@ public class UserPersistenceAdapter implements UserOutputPort {
     public User getUserById(Long id) {
         UserEntity userEntity = userEntityRepo.findById(id)
                 .orElseThrow(()->new UserNotFoundException(String.format("User with id %s not found",id)));
-        System.out.println(userEntity.getDateCreated());
         return EntityMappers.INSTANCE.toModel(userEntity);
     }
 

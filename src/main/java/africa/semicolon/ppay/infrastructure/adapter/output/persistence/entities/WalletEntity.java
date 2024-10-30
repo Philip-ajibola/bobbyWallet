@@ -29,11 +29,13 @@ public class WalletEntity {
     @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
-    private LocalDateTime dateCreated = now();
+    private LocalDateTime dateCreated;
 
     @PrePersist
     void updateData() {
         this.balance = BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_UP);
         this.pin = "0000";
+        this.dateCreated=now();
     }
+
 }

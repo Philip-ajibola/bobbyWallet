@@ -23,10 +23,10 @@ public class User {
     private String password;
     private String phoneNumber;
     private String keyCloakId;
+    private String role;
     private String email;
     private Wallet wallet;
     private List<Transaction> transactionHistories;
-    @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime dateCreated;

@@ -36,5 +36,9 @@ public class TransactionEntity {
     @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
-    private LocalDateTime dateCreated = now();
+    private LocalDateTime dateCreated ;
+    @PrePersist
+    public void setDateCreated() {
+        dateCreated = now();
+    }
 }

@@ -25,7 +25,6 @@ public class Wallet {
     private Long id;
     private String pin;
     private BigDecimal balance ;
-    @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime dateCreated;

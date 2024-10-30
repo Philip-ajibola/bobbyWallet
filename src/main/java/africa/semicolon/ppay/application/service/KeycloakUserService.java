@@ -196,7 +196,7 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
             throw new PPayWalletException("KeyCloak: Failed to register user reason: invalid detail or email already exist");
         }
         String userId = getUserByUsername(request.getEmail()).getId();
-        assignRoleToUser(userId, "USERS");
+        assignRoleToUser(userId, request.getRole());
         request.setKeyCloakId(userId);
         sendVerificationEmail(userId);
         return request;

@@ -33,7 +33,6 @@ public class Payment {
     private String currency ;
     private String ipAddress;
     private String recipient;
-    @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime dateCreated ;

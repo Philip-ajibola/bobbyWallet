@@ -16,10 +16,13 @@ import org.mapstruct.factory.Mappers;
 public interface EntityMappers {
     EntityMappers INSTANCE = Mappers.getMapper(EntityMappers.class);
     @Mapping(source = "wallet",target = "wallet")
+    @Mapping(source = "dateCreated",target = "dateCreated")
     User toModel(UserEntity user);
+    @Mapping(source = "dateCreated",target = "dateCreated")
     Wallet toModel(WalletEntity walletEntity);
     Payment toModel(PaymentEntity paymentEntity);
     PaymentEntity toEntity(Payment payment);
+    @Mapping(source = "dateCreated",target = "dateCreated")
     Transaction toModel(TransactionEntity transactionEntity);
     @Mapping(source = "wallet",target = "wallet")
     UserEntity toEntity(User user);

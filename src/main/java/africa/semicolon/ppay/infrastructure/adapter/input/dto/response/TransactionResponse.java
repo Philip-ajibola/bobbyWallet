@@ -5,6 +5,10 @@ import africa.semicolon.ppay.domain.model.DateCreated;
 import africa.semicolon.ppay.domain.model.TransactionStatus;
 import africa.semicolon.ppay.domain.model.TransactionType;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,5 +23,7 @@ public class TransactionResponse {
     private TransactionStatus status;
     private TransactionType transactionType;
     private BigDecimal amount;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using= LocalDateTimeSerializer.class)
     private LocalDateTime dateCreated;
 }
