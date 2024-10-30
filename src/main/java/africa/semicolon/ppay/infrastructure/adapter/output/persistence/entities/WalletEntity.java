@@ -1,14 +1,18 @@
 package africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities;
 
 import africa.semicolon.ppay.domain.model.DateCreated;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Getter
@@ -22,7 +26,10 @@ public class WalletEntity {
     @Column(length = 4)
     private String pin;
     private BigDecimal balance ;
-    private DateCreated dateCreated;
+    @Setter(AccessLevel.NONE)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using= LocalDateTimeSerializer.class)
+    private LocalDateTime dateCreated = now();
 
     @PrePersist
     void updateData() {

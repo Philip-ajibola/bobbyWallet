@@ -78,7 +78,7 @@ class MonifyUserServiceTest {
         initializeTransferDto.setDestinationAccountNumber("9027531222");
         initializeTransferDto.setNarration("Emergency");
         initializeTransferDto.setDestinationBankCode("999992");
-        initializeTransferDto.setReference("BwB-" + System.currentTimeMillis());
+
 
         MonifyInitializeTransferResponse response = monifyUserService.initializeTransfer(initializeTransferDto);
         return response;

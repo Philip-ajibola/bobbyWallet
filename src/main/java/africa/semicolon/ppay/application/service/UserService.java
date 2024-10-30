@@ -2,11 +2,16 @@ package africa.semicolon.ppay.application.service;
 
 import africa.semicolon.ppay.application.ports.input.userUseCase.*;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
+import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.domain.model.Wallet;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.KeycloakResetPasswordRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ResetPasswordRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
+import africa.semicolon.ppay.infrastructure.adapter.input.mappers.DtoMappers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -27,8 +32,9 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindBy
     @Override
     public void delete(Long userId) {
         User user = findById(userId);
+        String id = user.getKeyCloakId();
         userOutputPort.delete(userId);
-        keycloakUserService.deleteUser(user.getKeyCloakId());
+        keycloakUserService.deleteUser(id);
     }
 
     @Override
@@ -45,9 +51,10 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindBy
     public User createUser(User user,WalletService walletService) {
         user = keycloakUserService.registerUser(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User user1 = userOutputPort.saveUser(user);
-        Wallet wallet = walletService.createWallet(user1.getId());
-        user1.setWallet(wallet);
+         user = userOutputPort.saveUser(user);
+        Wallet wallet = walletService.createWallet(user.getId());
+        System.out.println(user.getId());
+        user.setWallet(wallet);
         return userOutputPort.saveUser(user);
     }
 
@@ -96,7 +103,13 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindBy
     }
 
     @Override
-    public void resetPassword(String username) {
-        keycloakUserService.forgetPassword(username);
+    public UserResponse resetPassword(ResetPasswordRequest  request) {
+        User user = findById(request.getId());
+        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))throw new InvalidUserCredentials("Invalid User Credentials Provided");
+        KeycloakResetPasswordRequest resetPasswordRequest = new KeycloakResetPasswordRequest(request.getNewPassword(),user.getEmail());
+        keycloakUserService.forgetPassword(resetPasswordRequest);
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user = userOutputPort.saveUser(user);
+        return DtoMappers.INSTANCE.toUserResponse(user);
     }
 }

@@ -21,9 +21,6 @@ public class DateCreated {
     @Setter(AccessLevel.NONE)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using= LocalDateTimeSerializer.class)
-    private LocalDateTime dateCreated;
-    @PrePersist
-    public void setDateCreated(){
-        this.dateCreated = now();
-    }
+    private LocalDateTime dateCreated = now();
+
 }

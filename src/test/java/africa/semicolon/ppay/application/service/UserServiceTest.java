@@ -3,7 +3,9 @@ package africa.semicolon.ppay.application.service;
 import africa.semicolon.ppay.domain.exception.UserNotFoundException;
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ResetPasswordRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
@@ -71,5 +73,15 @@ class UserServiceTest {
         User user = userService.findByEmail("johndoe@example.com");
         assertNotNull(user);
         assertThat(user.getFirstname()).isEqualTo("John");
+    }
+    @Test
+    void testThatUserCanResetPassword(){
+        ResetPasswordRequest request = new ResetPasswordRequest();
+        request.setId(103L);
+        request.setNewPassword("newPassword");
+        request.setOldPassword("password");
+        UserResponse user = userService.resetPassword(request);
+        assertNotNull(user);
+        assertThat(user.getFirstname()).isEqualTo("philip");
     }
 }

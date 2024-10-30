@@ -62,20 +62,28 @@ public class MonifyVerifyTransactionResponse {
                 private boolean supportsTokenization;
                 private String maskedPan;
             }
-
+            @Getter
+            @Setter
+            @JsonInclude(JsonInclude.Include.NON_NULL)
             public static class AccountDetails {
                 // Define fields here if needed, assuming it's non-null in some responses.
             }
-
+        @Getter
+        @Setter
+        @JsonInclude(JsonInclude.Include.NON_NULL)
             public static class AccountPayments {
                 // Define fields here if needed, assuming it's non-null in some responses.
             }
-
+        @Getter
+        @Setter
+        @JsonInclude(JsonInclude.Include.NON_NULL)
             public static class Customer {
                 private String email;
                 private String name;
             }
-
+        @Getter
+        @Setter
+        @JsonInclude(JsonInclude.Include.NON_NULL)
             public static class MetaData {
                 // Define fields here if needed.
             }

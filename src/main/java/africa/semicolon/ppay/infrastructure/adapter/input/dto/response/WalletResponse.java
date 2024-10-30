@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,5 +17,6 @@ import java.math.BigDecimal;
 public class WalletResponse<T> {
     private Long id;
     private BigDecimal balance;
+    private LocalDateTime dateCreated;
     private T data;
 }

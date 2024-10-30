@@ -18,6 +18,7 @@ public class UserPersistenceAdapter implements UserOutputPort {
     @Override
     public User saveUser(User user) {
         UserEntity userEntity = EntityMappers.INSTANCE.toEntity(user);
+        userEntity = userEntityRepo.save(userEntity);
         return EntityMappers.INSTANCE.toModel(userEntity);
     }
 
@@ -25,6 +26,7 @@ public class UserPersistenceAdapter implements UserOutputPort {
     public User getUserById(Long id) {
         UserEntity userEntity = userEntityRepo.findById(id)
                 .orElseThrow(()->new UserNotFoundException(String.format("User with id %s not found",id)));
+        System.out.println(userEntity.getDateCreated());
         return EntityMappers.INSTANCE.toModel(userEntity);
     }
 

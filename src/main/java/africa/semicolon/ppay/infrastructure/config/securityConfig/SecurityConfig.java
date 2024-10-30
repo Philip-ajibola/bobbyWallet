@@ -15,66 +15,34 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 //@EnableMethodSecurity
 public class SecurityConfig {
-    @Value("${keycloak.auth-server-url}")
-    private String keycloakServerUrl;
+    private List<String> endPoints = List.of(
+            "http://localhost:8085/api/v1/users/reset_password",
+            "http://localhost:8085/api/v1/users/change_pin",
+            "http://localhost:8085/api/v1/transaction/getALlTransactions/**",
+            "http://localhost:8085/api/v1/transaction/getTransaction/**",
+            "http://localhost:8085/api/v1/wallet/deposit",
+            "http://localhost:8085/api/v1/prembly/verify",
+            "http://localhost:8085/api/v1/users/delete/**",
+            "http://localhost:8085/api/v1/users/find_by_id/**"
 
-    @Value("${keycloak.realm}")
-    private String realm;
-
-    @Value("${keycloak.client-id}")
-    private String clientId;
-
-    @Value("${keycloak.client-secret}")
-    private String clientSecret;
-    @Value("${keycloak.username}")
-    private  String username;
-    @Value("${keycloak.password}")
-    private String password;
+    );
     @Autowired
     private JWTAuthConverter jwtAuthConverter;
-//
 
-//        @Bean
-//        public WebSecurityCustomizer webSecurityCustomizer() {
-//            return (web) -> {
-//                web.ignoring().requestMatchers(
-//                        HttpMethod.POST,
-//                        "/public/",
-//                        "/api/v1/users/register",
-//                        "/api/v1/users/login"
-//                );
-//                web.ignoring().requestMatchers(
-//                        HttpMethod.GET,
-//                        "/public/"
-//                );
-//                web.ignoring().requestMatchers(
-//                        HttpMethod.DELETE,
-//                        "/public/",
-//                        "/users/{id}"
-//                );
-//                web.ignoring().requestMatchers(
-//                        HttpMethod.PUT,
-//                        "/public/",
-//                        "/users/{id}/send-verification-email",
-//                        "/users/forgot-password"
-//
-//                );
-//
-//
-//            };
-//
-//
-//        }
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/v1/users/register","/api/v1/users/login","/api/v1/wallet/pay_completed").permitAll()
+                    .requestMatchers("/api/v1/monify/authorize").hasRole("ADMIN")
+                    .requestMatchers(endPoints.toArray(new String[0])).hasRole("USERS")
                     .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer

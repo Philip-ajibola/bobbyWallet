@@ -35,7 +35,7 @@ public class PremblyIdentityVerificationService implements VerifyIdentityUseCase
     public StringBuilder verifyUserIdentity(VerifyUserIdentityDto userIdentity){
         String imageUrl = getImageUrl(userIdentity);
         try{
-            StringEntity entity = getStringEntity(userIdentity, imageUrl);
+            StringEntity entity = getStringEntity(userIdentity.getNin(), imageUrl);
             StringBuilder result = new StringBuilder();
             HttpPost httpPost = createPost(entity);
             HttpClient client = HttpClientBuilder.create().build();
@@ -59,10 +59,10 @@ public class PremblyIdentityVerificationService implements VerifyIdentityUseCase
         return httpPost;
     }
 
-    private StringEntity getStringEntity(VerifyUserIdentityDto userIdentity, String imageUrl) throws JsonProcessingException, UnsupportedEncodingException {
+    private StringEntity getStringEntity(String nin, String imageUrl) throws JsonProcessingException, UnsupportedEncodingException {
         Map<String, String> request  = new HashMap<>();
         request.put("image", imageUrl);
-        request.put("number", userIdentity.getNin());
+        request.put("number", nin);
         String json=objectMapper.writeValueAsString(request);
         StringEntity entity = new StringEntity(json);
         return entity;

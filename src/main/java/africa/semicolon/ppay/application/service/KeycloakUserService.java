@@ -138,6 +138,7 @@ import africa.semicolon.ppay.application.ports.input.KeycloakUseCase.LoginUseCas
 import africa.semicolon.ppay.application.ports.input.KeycloakUseCase.RegisterUseCase;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
 import africa.semicolon.ppay.domain.model.User;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.KeycloakResetPasswordRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -157,6 +158,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Collections;
 import java.util.List;
@@ -177,6 +179,7 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
     private String tokenServerUrl;
     private RestTemplate restTemplate;
     private Keycloak keycloak;
+    private WebClient webClient;
 
     public KeycloakUserService(RestTemplate restTemplate, Keycloak keycloak) {
         this.restTemplate = restTemplate;
@@ -190,15 +193,18 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
         Response response =  getUserResource().create(user);
         System.out.println(response.getStatus());
         if(response.getStatus() !=201){
-            throw new PPayWalletException("Failed to register user");
+            throw new PPayWalletException("KeyCloak: Failed to register user reason: invalid detail or email already exist");
         }
         String userId = getUserByUsername(request.getEmail()).getId();
-        System.out.println(userId);
         assignRoleToUser(userId, "USERS");
-        System.out.println(userId);
         request.setKeyCloakId(userId);
-
+        sendVerificationEmail(userId);
         return request;
+    }
+    private void sendVerificationEmail(String userId){
+        UsersResource usersResource = getUserResource();
+        usersResource.get(userId).sendVerifyEmail();
+
     }
 
     private static UserRepresentation getUserRepresentation(User request, CredentialRepresentation credentials) {
@@ -277,13 +283,14 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
     }
 
     @Override
-    public void forgetPassword(String username) {
-        UserRepresentation user = getUserByUsername(username);
+    public void forgetPassword(KeycloakResetPasswordRequest request) {
+
+        UserRepresentation user = getUserByUsername(request.getUsername());
         UsersResource usersResource = getUserResource();
 
         UserResource userResource = usersResource.get(user.getId());
 
-        userResource.executeActionsEmail(List.of("UPDATE_PASSWORD"));
+        userResource.resetPassword(getCredentialRepresentation(request.getPassword()));
     }
     public void updateUser( User updatedUser) {
         System.out.println(updatedUser.getKeyCloakId());

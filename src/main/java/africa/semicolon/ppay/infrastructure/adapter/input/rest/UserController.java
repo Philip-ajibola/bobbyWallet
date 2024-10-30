@@ -6,6 +6,7 @@ import africa.semicolon.ppay.application.service.WalletService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ChangePinRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.CreateUserDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ResetPasswordRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
@@ -36,7 +37,7 @@ public class UserController {
         user = userService.createUser(user,walletService);
         WalletResponse wallet = DtoMappers.INSTANCE.toWalletResponse(user.getWallet());
         var finalResponse = DtoMappers.INSTANCE.toUserResponse(user);
-        finalResponse.setResponse(wallet);
+        finalResponse.setWallet(wallet);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Registration Successfully", finalResponse,true));
     }
     @PostMapping("/login")
@@ -81,8 +82,8 @@ public class UserController {
     }
     @PatchMapping("/reset_password")
     @PreAuthorize("hasRole('USERS')")
-    public ResponseEntity<?> resetPassword(@RequestParam String username){
-         userService.resetPassword(username);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Pin changed successfully", "Password Changed Successfully", true));
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request){
+        var response = userService.resetPassword(request);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Password reset successfully", response, true));
     }
 }

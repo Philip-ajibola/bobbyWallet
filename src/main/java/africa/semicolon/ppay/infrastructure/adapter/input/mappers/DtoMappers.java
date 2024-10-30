@@ -8,15 +8,16 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.Transacti
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.WalletResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface DtoMappers {
     DtoMappers INSTANCE = Mappers.getMapper(DtoMappers.class);
     User toUser(CreateUserDto  input);
-    UserResponse toResponse(User user);
-    WalletResponse toWalletResponse(Wallet wallet);
 
+    WalletResponse toWalletResponse(Wallet wallet);
+    @Mapping(source = "wallet", target = "wallet")
     UserResponse toUserResponse(User user);
 
     TransactionResponse toTransactionResponse(Transaction transaction);

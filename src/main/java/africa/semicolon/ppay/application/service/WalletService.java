@@ -66,7 +66,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
 
     private void createDepositTransaction(PaymentVerificationResponse paymentVerificationResponse, Wallet wallet) {
         Transaction transaction = new Transaction();
-        transaction.setAmount(paymentVerificationResponse.getData().getAmount());
+        transaction.setAmount(paymentVerificationResponse.getData().getAmount().divide(BigDecimal.valueOf(100)));
         transaction.setWallet(findById(wallet.getId()));
         transaction.setTransactionType(TransactionType.DEPOSIT);
         transaction.setStatus(paymentVerificationResponse.isStatus()? TransactionStatus.SUCCESSFUL : TransactionStatus.FAILED);
@@ -75,7 +75,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     private void createTransferTransaction(TransferVerificationResponse paymentVerificationResponse,Long id) {
             Wallet wallet = findById(id);
             Transaction transaction = new Transaction();
-            transaction.setAmount(paymentVerificationResponse.getData().getAmount());
+            transaction.setAmount(paymentVerificationResponse.getData().getAmount().divide(BigDecimal.valueOf(100)));
             transaction.setWallet(findById(wallet.getId()));
             transaction.setTransactionType(TransactionType.DEPOSIT);
             transaction.setStatus(paymentVerificationResponse.isStatus()? TransactionStatus.SUCCESSFUL : TransactionStatus.FAILED);
@@ -114,7 +114,8 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     public Wallet verifyPayment(VerifyPaymentDto verifyPaymentDto) {
         PaymentVerificationResponse paymentVerificationResponse = payStackPaymentService.paymentVerification(verifyPaymentDto.getReference(), verifyPaymentDto.getId());
         Wallet wallet = findById(verifyPaymentDto.getId());
-        wallet.deposit(verifyPaymentDto.getAmount());
+        System.out.println(verifyPaymentDto.getAmount());
+        wallet.setBalance(wallet.getBalance().add(verifyPaymentDto.getAmount()));
         wallet = walletOutputPort.saveWallet(wallet);
         createDepositTransaction(paymentVerificationResponse,wallet);
         return wallet;

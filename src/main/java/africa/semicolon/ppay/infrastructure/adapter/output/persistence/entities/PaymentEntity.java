@@ -2,12 +2,19 @@ package africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities
 
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities.UserEntity;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Getter
@@ -30,8 +37,9 @@ public class PaymentEntity {
     private String currency ;
     private String ipAddress;
     private String recipient;
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn;
+    @Setter(AccessLevel.NONE)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using= LocalDateTimeSerializer.class)
+    private LocalDateTime dateCreated = now();
 
 }

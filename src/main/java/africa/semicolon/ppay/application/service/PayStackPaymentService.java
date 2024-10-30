@@ -151,7 +151,6 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
                 .channel(paymentVerificationResponse.getData().getChannel())
                 .currency(paymentVerificationResponse.getData().getCurrency())
                 .ipAddress(paymentVerificationResponse.getData().getIpAddress())
-                .createdOn(new Date())
                 .build();
         return paymentPaystack;
     }
@@ -168,7 +167,6 @@ public class PayStackPaymentService implements CreateRecipientUseCase, Initializ
                 .createdAt(transferVerificationResponse.getData().getCreatedAt())
                 .currency(transferVerificationResponse.getData().getCurrency())
                 .recipient(transferVerificationResponse.getData().getRecipient())
-                .createdOn(new Date())
                 .build();
         return paymentPaystack;
     }

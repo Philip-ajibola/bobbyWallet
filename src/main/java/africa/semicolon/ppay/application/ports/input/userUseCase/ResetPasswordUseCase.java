@@ -1,5 +1,8 @@
 package africa.semicolon.ppay.application.ports.input.userUseCase;
 
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ResetPasswordRequest;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
+
 public interface ResetPasswordUseCase {
-    void resetPassword(String username);
+    UserResponse resetPassword(ResetPasswordRequest request);
 }

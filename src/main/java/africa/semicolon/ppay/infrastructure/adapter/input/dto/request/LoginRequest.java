@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class LoginRequest {
     @NotBlank(message = "Provide Email")
+
     private String email;
     @NotBlank(message = "Provide Password")
     private String password;

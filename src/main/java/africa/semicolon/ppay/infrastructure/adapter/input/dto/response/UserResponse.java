@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -15,6 +17,6 @@ public class UserResponse {
     private String firstname;
     private String lastname;
     private String phoneNumber;
-    private DateCreated dateCreated;
-    private WalletResponse response;
+    private LocalDateTime dateCreated;
+    private WalletResponse wallet;
 }

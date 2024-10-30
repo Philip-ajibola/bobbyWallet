@@ -1,9 +1,6 @@
 package africa.semicolon.ppay.application.service;
 
-import africa.semicolon.ppay.application.ports.input.monifyUseCase.AuthorizeTransferUseCase;
-import africa.semicolon.ppay.application.ports.input.monifyUseCase.InitializePaymentUseCase;
-import africa.semicolon.ppay.application.ports.input.monifyUseCase.TransferUseCase;
-import africa.semicolon.ppay.application.ports.input.monifyUseCase.VerifyPaymentUseCase;
+import africa.semicolon.ppay.application.ports.input.monifyUseCase.*;
 import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePaymentRequest;
@@ -31,7 +28,7 @@ import java.util.Base64;
 import static africa.semicolon.ppay.domain.constant.MonifyApiConstant.*;
 
 @Slf4j
-public class MonifyUserService  implements InitializePaymentUseCase, VerifyPaymentUseCase, TransferUseCase, AuthorizeTransferUseCase {
+public class MonifyUserService  implements InitializePaymentUseCase, VerifyPaymentUseCase, TransferUseCase, AuthorizeTransferUseCase, VerifyTransferUseCase {
     @Value("${monify.api.key}")
     private String MONIFY_API_KEY;
     @Value("${monify.api.secret}")
@@ -120,6 +117,7 @@ public class MonifyUserService  implements InitializePaymentUseCase, VerifyPayme
     @Override
     public MonifyInitializeTransferResponse initializeTransfer(MonifyInitializeTransferDto dto)  {
         String token = authenticate().getResponseBody().getAccessToken();
+        dto.setReference("BwB-" + System.currentTimeMillis());
         dto.setSourceAccountNumber(accountNumber);
         try {
 
