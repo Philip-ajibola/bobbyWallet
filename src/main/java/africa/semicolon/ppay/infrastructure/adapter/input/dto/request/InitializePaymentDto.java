@@ -3,6 +3,7 @@ package africa.semicolon.ppay.infrastructure.adapter.input.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -14,7 +15,9 @@ import java.math.BigDecimal;
 public class InitializePaymentDto {
 
         @JsonProperty("amount")
+        @NotBlank(message = "Amount not Be blank")
         private BigDecimal amount;
+        @NotBlank(message = "Amount not Be blank")
         @JsonProperty("user_id")
         private Long id;
         @JsonProperty("email")
