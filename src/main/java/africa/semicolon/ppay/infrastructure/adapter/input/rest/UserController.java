@@ -20,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -46,7 +49,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Login Successfully", response,true));
     }
     @GetMapping("/find_by_id/{userId}")
-    @PreAuthorize("hasRole('USERS')")
+    @PreAuthorize("hasAnyRole('USERS','ADMIN')")
     public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId){
         User user = userService.findById(userId);
         UserResponse response =  DtoMappers.INSTANCE.toUserResponse(user);
@@ -68,7 +71,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("User updated successfully", response, true));
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('USERS')")
+    @PreAuthorize("hasAnyRole('USERS','ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long userId){
         userService.delete(userId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("User deleted successfully", "Deleted Successful", true));
@@ -85,5 +88,12 @@ public class UserController {
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request){
         var response = userService.resetPassword(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Password reset successfully", response, true));
+    }
+    @PatchMapping("/get_all_users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllUser(){
+        List<User> response = userService.getAllUsers();
+        List<UserResponse> responseList = response.stream().map(user -> DtoMappers.INSTANCE.toUserResponse(user)).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("List Of Users", responseList, true));
     }
 }

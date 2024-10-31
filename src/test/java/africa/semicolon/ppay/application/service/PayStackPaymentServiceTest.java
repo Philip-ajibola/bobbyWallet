@@ -71,4 +71,5 @@ class PayStackPaymentServiceTest {
         InitializeTransferResponse finalResponse = payStackPaymentService.transfer(transferDto);
        assertThat(finalResponse.getData().getStatus()).isEqualTo("true");
     }
+
 }

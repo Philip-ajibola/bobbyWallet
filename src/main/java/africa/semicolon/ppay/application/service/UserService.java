@@ -17,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindByIdUseCase,LoginUseCase, UpdateUserUseCase, DeleteUserUseCase, ExistByIdUseCase,ChangePinUseCase,ResetPasswordUseCase {
+import java.util.List;
+
+public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindByIdUseCase,LoginUseCase, UpdateUserUseCase, DeleteUserUseCase, ExistByIdUseCase,ChangePinUseCase,ResetPasswordUseCase,GetAllUserUseCase {
     private final UserOutputPort userOutputPort;
     private final KeycloakUserService keycloakUserService;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -111,5 +113,10 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindBy
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user = userOutputPort.saveUser(user);
         return DtoMappers.INSTANCE.toUserResponse(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userOutputPort.getAllUsers();
     }
 }

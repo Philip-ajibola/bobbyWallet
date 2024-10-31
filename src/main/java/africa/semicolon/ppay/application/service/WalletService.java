@@ -105,8 +105,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     public Wallet verifyTransfer(VerifyPaymentDto dto) {
         TransferVerificationResponse response = payStackPaymentService.transferVerification(dto.getReference(), dto.getId());
         Wallet wallet = findById(dto.getId());
-        wallet.transfer(dto.getAmount());
-        createTransferTransaction(response,dto.getId());
+        wallet.setBalance(wallet.getBalance().subtract(dto.getAmount()));        createTransferTransaction(response,dto.getId());
         return walletOutputPort.saveWallet(wallet);
     }
 
@@ -114,7 +113,6 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
     public Wallet verifyPayment(VerifyPaymentDto verifyPaymentDto) {
         PaymentVerificationResponse paymentVerificationResponse = payStackPaymentService.paymentVerification(verifyPaymentDto.getReference(), verifyPaymentDto.getId());
         Wallet wallet = findById(verifyPaymentDto.getId());
-        System.out.println(verifyPaymentDto.getAmount());
         wallet.setBalance(wallet.getBalance().add(verifyPaymentDto.getAmount()));
         wallet = walletOutputPort.saveWallet(wallet);
         createDepositTransaction(paymentVerificationResponse,wallet);

@@ -84,4 +84,10 @@ class UserServiceTest {
         assertNotNull(user);
         assertThat(user.getFirstname()).isEqualTo("philip");
     }
+    @Test
+    void testThatAdminCanGetAllUsers(){
+        List<User> users = userService.getAllUsers();
+        assertNotNull(users);
+        assertThat(users.size()).isEqualTo(3);
+    }
 }

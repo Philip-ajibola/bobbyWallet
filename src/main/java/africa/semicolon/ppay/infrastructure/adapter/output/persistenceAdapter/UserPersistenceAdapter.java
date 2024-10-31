@@ -9,6 +9,8 @@ import africa.semicolon.ppay.infrastructure.adapter.output.persistence.entities.
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.UserEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static java.time.LocalDateTime.now;
 
 public class UserPersistenceAdapter implements UserOutputPort {
@@ -55,4 +57,11 @@ public class UserPersistenceAdapter implements UserOutputPort {
         User user = EntityMappers.INSTANCE.toModel(userEntity);
         return user;
     }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<UserEntity> userEntities = userEntityRepo.findAll();
+        return userEntities.stream().map(userEntity ->EntityMappers.INSTANCE.toModel(userEntity)).toList();
+    }
+
 }
