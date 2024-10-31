@@ -78,14 +78,14 @@ public class UserController {
     }
     @PatchMapping("/change_pin")
     @PreAuthorize("hasRole('USERS')")
-    public ResponseEntity<?> changePin(@RequestBody ChangePinRequest request){
+    public ResponseEntity<?> changePin(@RequestBody @Valid  ChangePinRequest request){
         User user = userService.changePin(request.getId(), request.getPassword(), request.getNewPin(), walletService);
         UserResponse response = DtoMappers.INSTANCE.toUserResponse(user);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Pin changed successfully", response, true));
     }
     @PatchMapping("/reset_password")
     @PreAuthorize("hasRole('USERS')")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request){
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordRequest request){
         var response = userService.resetPassword(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Password reset successfully", response, true));
     }

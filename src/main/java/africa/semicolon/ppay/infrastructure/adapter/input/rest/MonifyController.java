@@ -5,6 +5,7 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePa
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.AuthorizeRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.MonifyInitializeTransferDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class MonifyController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(MonifyInitializePaymentRequest request) {
+    public ResponseEntity<?> deposit(@Valid MonifyInitializePaymentRequest request) {
         var response = userService.initializePayment(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Deposit SuccessFully Initiated ", response,true));
 
@@ -34,14 +35,14 @@ public class MonifyController {
 
     }
     @PostMapping("/transfer")
-    public ResponseEntity<?> transfer(MonifyInitializeTransferDto request) {
+    public ResponseEntity<?> transfer(@Valid  MonifyInitializeTransferDto request) {
         var response = userService.initializeTransfer(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Transfer Successfully Initiated ", response,true));
 
     }
     @PostMapping("/authorize")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> authorizeTransfer(AuthorizeRequest request) {
+    public ResponseEntity<?> authorizeTransfer(@Valid AuthorizeRequest request) {
         var response = userService.authorizeTransfer(request);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Transaction Authorized ", response,true));
 
