@@ -8,4 +8,6 @@ public interface TransactionOutputPort {
     Transaction saveTransaction(Transaction transaction);
     Transaction getTransactionById(Long id);
     List<Transaction> getAllTransactions(Long userId);
+
+    List<Transaction> getAll();
 }

@@ -37,4 +37,11 @@ public class TransactionController {
         List<TransactionResponse> response = transactions.stream().map(transaction -> DtoMappers.INSTANCE.toTransactionResponse(transaction)).toList();
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("All Transactions", response,true));
     }
+    @GetMapping("/getALlTransactions")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllTransactions(){
+        List<Transaction> transactions = transactionService.getAllTransaction();
+        List<TransactionResponse> response = transactions.stream().map(transaction -> DtoMappers.INSTANCE.toTransactionResponse(transaction)).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("All Transactions", response,true));
+    }
 }

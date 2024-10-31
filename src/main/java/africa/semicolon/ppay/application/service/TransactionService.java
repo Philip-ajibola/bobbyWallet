@@ -1,5 +1,6 @@
 package africa.semicolon.ppay.application.service;
 
+import africa.semicolon.ppay.application.ports.input.transactionUseCase.GetAllTransactionUseCase;
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.SaveTransactionUseCase;
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewASingleTransactionUseCase;
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewAllTransactionUseCase;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class TransactionService implements SaveTransactionUseCase, ViewAllTransactionUseCase,ViewASingleTransactionUseCase {
+public class TransactionService implements SaveTransactionUseCase, GetAllTransactionUseCase, ViewAllTransactionUseCase,ViewASingleTransactionUseCase {
     private final TransactionOutputPort transactionOutputPort;
 
     public TransactionService(TransactionOutputPort transactionOutputPort) {
@@ -30,4 +31,9 @@ public class TransactionService implements SaveTransactionUseCase, ViewAllTransa
     public List<Transaction> viewAllTransactions(Long userId) {
         return transactionOutputPort.getAllTransactions(userId);
     }
+
+    public List<Transaction> getAllTransaction() {
+        return transactionOutputPort.getAll();
+    }
+
 }

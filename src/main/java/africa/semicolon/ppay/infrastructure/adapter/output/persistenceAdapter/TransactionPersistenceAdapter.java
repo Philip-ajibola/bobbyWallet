@@ -35,4 +35,10 @@ public class TransactionPersistenceAdapter implements TransactionOutputPort {
         List<TransactionEntity> transactionEntities = transactionEntityRepo.findAllTransactionsBy(walletId);
         return transactionEntities.stream().map(TransactionEntity->EntityMappers.INSTANCE.toModel(TransactionEntity)).toList();
     }
+
+    @Override
+    public List<Transaction> getAll() {
+        List<TransactionEntity> transactionEntities = transactionEntityRepo.findAll();
+        return transactionEntities.stream().map(TransactionEntity->EntityMappers.INSTANCE.toModel(TransactionEntity)).toList();
+    }
 }
