@@ -1,5 +1,7 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
+import africa.semicolon.ppay.application.service.TransactionService;
+import africa.semicolon.ppay.domain.model.Transaction;
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.application.service.UserService;
 import africa.semicolon.ppay.application.service.WalletService;
@@ -7,10 +9,7 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ChangePinR
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.CreateUserDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ResetPasswordRequest;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.LoginResponse;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.UserResponse;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.WalletResponse;
+import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.*;
 import africa.semicolon.ppay.infrastructure.adapter.input.mappers.DtoMappers;
 import com.github.fge.jsonpatch.JsonPatch;
 import jakarta.validation.Valid;
@@ -28,11 +27,13 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final WalletService walletService;
+    private final TransactionService transactionService;
 
     @Autowired
-    public UserController(UserService userService, WalletService walletService) {
+    public UserController(UserService userService, WalletService walletService, TransactionService transactionService) {
         this.userService = userService;
         this.walletService = walletService;
+        this.transactionService = transactionService;
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody  CreateUserDto userDto){
@@ -95,5 +96,12 @@ public class UserController {
         List<User> response = userService.getAllUsers();
         List<UserResponse> responseList = response.stream().map(user -> DtoMappers.INSTANCE.toUserResponse(user)).toList();
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("List Of Users", responseList, true));
+    }
+    @GetMapping("/getALlTransactions/{id}")
+    @PreAuthorize("hasRole('USERS')")
+    public ResponseEntity<?> getAllTransactions(@PathVariable("id") Long userId){
+        List<Transaction> transactions = userService.getAllTransactions(userId,transactionService);
+        List<TransactionResponse> response = transactions.stream().map(transaction -> DtoMappers.INSTANCE.toTransactionResponse(transaction)).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("All Transactions", response,true));
     }
 }

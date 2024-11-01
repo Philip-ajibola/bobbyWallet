@@ -30,13 +30,7 @@ public class TransactionController {
         TransactionResponse transactionResponse= DtoMappers.INSTANCE.toTransactionResponse(transaction);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Transaction", transactionResponse,true));
     }
-    @GetMapping("/getALlTransactions/{id}")
-    @PreAuthorize("hasRole('USERS')")
-    public ResponseEntity<?> getAllTransactions(@PathVariable("id") Long userId){
-        List<Transaction> transactions = transactionService.viewAllTransactions(userId);
-        List<TransactionResponse> response = transactions.stream().map(transaction -> DtoMappers.INSTANCE.toTransactionResponse(transaction)).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("All Transactions", response,true));
-    }
+
     @GetMapping("/getALlTransactions")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllTransactions(){

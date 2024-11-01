@@ -4,6 +4,8 @@ import africa.semicolon.ppay.application.ports.input.userUseCase.*;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
 import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
+import africa.semicolon.ppay.domain.exception.UserNotFoundException;
+import africa.semicolon.ppay.domain.model.Transaction;
 import africa.semicolon.ppay.domain.model.User;
 import africa.semicolon.ppay.domain.model.Wallet;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.KeycloakResetPasswordRequest;
@@ -15,11 +17,12 @@ import africa.semicolon.ppay.infrastructure.adapter.input.mappers.DtoMappers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
-public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindByIdUseCase,LoginUseCase, UpdateUserUseCase, DeleteUserUseCase, ExistByIdUseCase,ChangePinUseCase,ResetPasswordUseCase,GetAllUserUseCase {
+public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllTransactionUseCase, FindByIdUseCase,LoginUseCase, UpdateUserUseCase, DeleteUserUseCase, ExistByIdUseCase,ChangePinUseCase,ResetPasswordUseCase,GetAllUserUseCase {
     private final UserOutputPort userOutputPort;
     private final KeycloakUserService keycloakUserService;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -118,5 +121,11 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase, FindBy
     @Override
     public List<User> getAllUsers() {
         return userOutputPort.getAllUsers();
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions(Long userId, TransactionService service) {
+        if(!userOutputPort.existsById(userId)) throw new UserNotFoundException("User Not found");
+        return service.viewAllTransactions(userId);
     }
 }
