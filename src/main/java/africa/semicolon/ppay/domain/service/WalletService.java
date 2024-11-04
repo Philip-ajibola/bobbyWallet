@@ -1,6 +1,7 @@
 package africa.semicolon.ppay.domain.service;
 
 import africa.semicolon.ppay.application.ports.input.walletUseCase.*;
+import africa.semicolon.ppay.application.ports.output.PayStackPaymentOutputPort;
 import africa.semicolon.ppay.application.ports.output.WalletOutputPort;
 import africa.semicolon.ppay.domain.exception.InvalidAmountException;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
@@ -17,15 +18,15 @@ import java.math.BigDecimal;
 public class WalletService implements CreateWalletUseCase, DepositUseCase, FindByIdUseCase,
         TransferUseCase, ExistByIdUseCase, ChangeWalletPinUseCase,VerifyTransferUseCase,VerifyPaymentUseCase {
 
-    private  PayStackPaymentService payStackPaymentService;
+    private PayStackPaymentOutputPort payStackPaymentOutputPort;
 
     private TransactionService transactionService;
     private final WalletOutputPort walletOutputPort;
 
-    public WalletService(WalletOutputPort walletOutputPort, TransactionService transactionService, PayStackPaymentService payStackPaymentService) {
+    public WalletService(WalletOutputPort walletOutputPort, TransactionService transactionService, PayStackPaymentOutputPort payStackPaymentOutputPort) {
         this.walletOutputPort = walletOutputPort;
         this.transactionService = transactionService;
-        this.payStackPaymentService=payStackPaymentService;
+        this.payStackPaymentOutputPort = payStackPaymentOutputPort;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
                 .amount(depositDto.getAmount())
                 .id(depositDto.getId())
                 .build();
-        InitializePaymentResponse initializePaymentResponse = payStackPaymentService.initializePayment(initializePaymentDto);
+        InitializePaymentResponse initializePaymentResponse = payStackPaymentOutputPort.initializePayment(initializePaymentDto);
         return initializePaymentResponse;
     }
 
@@ -87,8 +88,8 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
         Wallet wallet = findById(dto.getId());
         if(dto.getAmount().compareTo(BigDecimal.ZERO)<0)throw new InvalidAmountException("Enter A Valid Amount");
         if (!wallet.getPin().equals(dto.getPin())) throw new PPayWalletException("You Provided Wrong PIN");
-        CreateTransferRecipientResponse createTransferRecipientResponse = payStackPaymentService.createTransferRecipient(new CreateTransferRecipientDto(dto.getId(), dto.getAccountNumber(), dto.getName(),dto.getBankCode()));
-        InitializeTransferResponse initializeTransferResponse = payStackPaymentService.transfer(new InitializeTransferDto(dto.getId(), dto.getAmount(), createTransferRecipientResponse.getData().getRecipientCode()));
+        CreateTransferRecipientResponse createTransferRecipientResponse = payStackPaymentOutputPort.createTransferRecipient(new CreateTransferRecipientDto(dto.getId(), dto.getAccountNumber(), dto.getName(),dto.getBankCode()));
+        InitializeTransferResponse initializeTransferResponse = payStackPaymentOutputPort.transfer(new InitializeTransferDto(dto.getId(), dto.getAmount(), createTransferRecipientResponse.getData().getRecipientCode()));
         return initializeTransferResponse;
     }
 
@@ -103,7 +104,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
 
     @Override
     public Wallet verifyTransfer(VerifyPaymentDto dto) {
-        TransferVerificationResponse response = payStackPaymentService.transferVerification(dto.getReference(), dto.getId());
+        TransferVerificationResponse response = payStackPaymentOutputPort.transferVerification(dto.getReference(), dto.getId());
         Wallet wallet = findById(dto.getId());
         wallet.setBalance(wallet.getBalance().subtract(dto.getAmount()));        createTransferTransaction(response,dto.getId());
         return walletOutputPort.saveWallet(wallet);
@@ -111,7 +112,7 @@ public class WalletService implements CreateWalletUseCase, DepositUseCase, FindB
 
     @Override
     public Wallet verifyPayment(VerifyPaymentDto verifyPaymentDto) {
-        PaymentVerificationResponse paymentVerificationResponse = payStackPaymentService.paymentVerification(verifyPaymentDto.getReference(), verifyPaymentDto.getId());
+        PaymentVerificationResponse paymentVerificationResponse = payStackPaymentOutputPort.paymentVerification(verifyPaymentDto.getReference(), verifyPaymentDto.getId());
         Wallet wallet = findById(verifyPaymentDto.getId());
         wallet.setBalance(wallet.getBalance().add(verifyPaymentDto.getAmount()));
         wallet = walletOutputPort.saveWallet(wallet);

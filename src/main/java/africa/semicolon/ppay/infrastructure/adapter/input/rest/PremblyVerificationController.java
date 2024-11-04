@@ -1,7 +1,6 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
-import africa.semicolon.ppay.application.ports.input.premblyUseCase.VerifyIdentityUseCase;
-import africa.semicolon.ppay.domain.service.PremblyIdentityVerificationService;
+import africa.semicolon.ppay.application.ports.output.PremblyOutputPort;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyUserIdentityDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -16,16 +15,17 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/v1/prembly")
 public class PremblyVerificationController {
-    private final VerifyIdentityUseCase verifyIdentityUseCase;
+    private final PremblyOutputPort premblyOutputPort;
 
-    public PremblyVerificationController( VerifyIdentityUseCase verifyIdentityUseCase) {
-        this.verifyIdentityUseCase = verifyIdentityUseCase;
+    public PremblyVerificationController(PremblyOutputPort premblyOutputPort) {
+        this.premblyOutputPort = premblyOutputPort;
     }
+
 
     @PostMapping("/verify")
     @PreAuthorize("hasRole('USERS')")
     public ResponseEntity<?> verifyIdentity(@Valid VerifyUserIdentityDto dto){
-        var response = verifyIdentityUseCase.verifyUserIdentity(dto);
+        var response = premblyOutputPort.verifyUserIdentity(dto);
         return ResponseEntity.status(OK).body(new ApiResponse<>("SuccessFull", response,true));
     }
 }

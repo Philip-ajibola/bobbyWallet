@@ -1,11 +1,11 @@
 package africa.semicolon.ppay.infrastructure.config;
 
-import africa.semicolon.ppay.application.ports.output.PayStackPaymentOutputPort;
-import africa.semicolon.ppay.application.ports.output.TransactionOutputPort;
-import africa.semicolon.ppay.application.ports.output.UserOutputPort;
-import africa.semicolon.ppay.application.ports.output.WalletOutputPort;
+import africa.semicolon.ppay.application.ports.output.*;
 
 import africa.semicolon.ppay.domain.service.*;
+import africa.semicolon.ppay.infrastructure.adapter.output.keycloakAdapter.KeyCloakAdapter;
+import africa.semicolon.ppay.infrastructure.adapter.output.monifyAdapter.MonifyUserAdapter;
+import africa.semicolon.ppay.infrastructure.adapter.output.premblyAdapter.PremblyAdapter;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.PayStackPaymentEntityRepo;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.TransactionEntityRepo;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.UserEntityRepo;
@@ -39,28 +39,25 @@ public class BeanConfig {
     @Value("${keycloak.client-secret}")
     private String clientSecret;
     @Bean
-    public WalletService walletService(WalletOutputPort walletOutputPort, TransactionService transactionService, PayStackPaymentService payStackPaymentService){
-        return new WalletService(walletOutputPort,transactionService, payStackPaymentService);
+    public WalletService walletService(WalletOutputPort walletOutputPort, TransactionService transactionService, PayStackPaymentOutputPort payStackPaymentOutputPort){
+        return new WalletService(walletOutputPort,transactionService, payStackPaymentOutputPort);
     };
     @Bean
     public TransactionService transactionService(TransactionOutputPort transactionOutputPort){
         return new TransactionService(transactionOutputPort);
     };
+
     @Bean
-    public PayStackPaymentService payStackPaymentService(UserService userService, PayStackPaymentOutputPort payStackPaymentOutputPort){
-        return new PayStackPaymentService( userService,payStackPaymentOutputPort);
-    };
-    @Bean
-    public UserService userService(UserOutputPort userOutputPort, KeycloakUserService keycloakUserService, PasswordEncoder passwordEncoder){
-        return new UserService(userOutputPort,keycloakUserService,passwordEncoder);
+    public UserService userService(UserOutputPort userOutputPort, IdentityManagerOutputPort identityManagerOutputPort, PasswordEncoder passwordEncoder){
+        return new UserService(userOutputPort, identityManagerOutputPort,passwordEncoder);
     }
     @Bean
     public UserPersistenceAdapter userServicePersistenceAdapter(UserEntityRepo userEntityRepo){
         return new UserPersistenceAdapter(userEntityRepo);
     }
     @Bean
-    public PayStackPaymentPersistenceAdapter payStackPaymentPersistenceAdapter(PayStackPaymentEntityRepo payStackPaymentEntityRepo){
-        return new PayStackPaymentPersistenceAdapter(payStackPaymentEntityRepo);
+    public PayStackPaymentPersistenceAdapter payStackPaymentPersistenceAdapter(PayStackPaymentEntityRepo payStackPaymentEntityRepo,UserOutputPort userOutputPort){
+        return new PayStackPaymentPersistenceAdapter(payStackPaymentEntityRepo,userOutputPort);
     }
     @Bean
     public TransactionPersistenceAdapter transactionPersistenceAdapter(TransactionEntityRepo userEntityRepo){
@@ -75,13 +72,14 @@ public class BeanConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public KeycloakUserService keycloakUserService(RestTemplate restTemplate, Keycloak keycloak){
-        return new KeycloakUserService(restTemplate,keycloak);
+    public IdentityManagerOutputPort authOutputPort(RestTemplate restTemplate, Keycloak keycloak){
+        return new KeyCloakAdapter( restTemplate,keycloak);
     }
     @Bean
-    public PremblyIdentityVerificationService premblyIdentityVerificationService(Cloudinary cloudinary){
-        return new PremblyIdentityVerificationService(cloudinary);
+    public PremblyOutputPort premblyOutputPort(Cloudinary cloudinary){
+        return new PremblyAdapter(cloudinary);
     }
     @Bean
     public Keycloak keycloak(){
@@ -94,8 +92,8 @@ public class BeanConfig {
                 .build();
     }
     @Bean
-    public MonifyUserService monifyUserService(WebClient webClient){
-        return new MonifyUserService(webClient);
+    public MonifyUserAdapter monifyUserService(WebClient webClient){
+        return new MonifyUserAdapter(webClient);
     }
     @Bean
     public WebClient webClient(){

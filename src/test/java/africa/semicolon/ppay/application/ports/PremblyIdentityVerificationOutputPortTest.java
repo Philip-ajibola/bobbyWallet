@@ -1,6 +1,6 @@
-package africa.semicolon.ppay.application.service;
+package africa.semicolon.ppay.application.ports;
 
-import africa.semicolon.ppay.domain.service.PremblyIdentityVerificationService;
+import africa.semicolon.ppay.application.ports.output.PremblyOutputPort;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyUserIdentityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j
-class PremblyIdentityVerificationServiceTest {
+class PremblyIdentityVerificationOutputPortTest {
     @Autowired
-    private PremblyIdentityVerificationService premblyIdentityVerificationService;
+    private PremblyOutputPort premblyIdentityVerificationService;
     @Value("${prembly.nin}")
     private String nin;
 

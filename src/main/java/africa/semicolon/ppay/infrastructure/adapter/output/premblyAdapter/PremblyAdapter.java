@@ -1,6 +1,6 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.infrastructure.adapter.output.premblyAdapter;
 
-import africa.semicolon.ppay.application.ports.input.premblyUseCase.VerifyIdentityUseCase;
+import africa.semicolon.ppay.application.ports.output.PremblyOutputPort;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyUserIdentityDto;
 import com.cloudinary.Cloudinary;
@@ -20,18 +20,20 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static africa.semicolon.ppay.domain.constant.PayStackAPIConstant.*;
+import static africa.semicolon.ppay.domain.constant.PayStackAPIConstant.PREMBLY_VERIFY_WITH_NIN;
+import static africa.semicolon.ppay.domain.constant.PayStackAPIConstant.STATUS_CODE_OK;
 import static africa.semicolon.ppay.infrastructure.utils.HelperClass.bufferReader;
 
-public class PremblyIdentityVerificationService implements VerifyIdentityUseCase {
+public class PremblyAdapter implements PremblyOutputPort {
     private final Cloudinary cloudinary;
     @Value("${prembly.api.key}")
     private String PREMBLY_API_KEY;
     private ObjectMapper objectMapper = new ObjectMapper();
-    public PremblyIdentityVerificationService(Cloudinary cloudinary) {
+    public PremblyAdapter(Cloudinary cloudinary) {
         this.cloudinary = cloudinary;
     }
 
+    @Override
     public StringBuilder verifyUserIdentity(VerifyUserIdentityDto userIdentity){
         String imageUrl = getImageUrl(userIdentity);
         try{
@@ -46,7 +48,7 @@ public class PremblyIdentityVerificationService implements VerifyIdentityUseCase
         }catch (Exception e){
             throw new PPayWalletException("prembly verification failed Reason: "+ e.getMessage() );
         }
-        
+
     }
 
     private HttpPost createPost(StringEntity entity) {

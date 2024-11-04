@@ -1,6 +1,6 @@
-package africa.semicolon.ppay.domain.service;
+package africa.semicolon.ppay.infrastructure.adapter.output.monifyAdapter;
 
-import africa.semicolon.ppay.application.ports.input.monifyUseCase.*;
+import africa.semicolon.ppay.application.ports.output.MonifyOutputPort;
 import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePaymentRequest;
@@ -28,7 +28,7 @@ import java.util.Base64;
 import static africa.semicolon.ppay.domain.constant.MonifyApiConstant.*;
 
 @Slf4j
-public class MonifyUserService  implements InitializePaymentUseCase, VerifyPaymentUseCase, TransferUseCase, AuthorizeTransferUseCase, VerifyTransferUseCase {
+public class MonifyUserAdapter implements MonifyOutputPort {
     @Value("${monify.api.key}")
     private String MONIFY_API_KEY;
     @Value("${monify.api.secret}")
@@ -40,7 +40,7 @@ public class MonifyUserService  implements InitializePaymentUseCase, VerifyPayme
     @Value("${monify.account-number}")
     private  String accountNumber;
 
-    public MonifyUserService(WebClient webClient) {
+    public MonifyUserAdapter(WebClient webClient) {
         this.webClient = webClient;
     }
 

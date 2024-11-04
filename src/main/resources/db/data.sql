@@ -3,8 +3,8 @@ truncate table wallets cascade;
 truncate table transactions cascade;
 
 insert into users(id,key_cloak_id,firstname,lastname,email,date_created,password) values
-(101, 'John','', 'Doe', 'johndoe@example.com', '2024-06-04T15:03:03.7992009700', '$2a$10$LUn5.yR9nChGEVFyjubjRuON6PgrhW7ZoQkMvZS/ajFWvf1KwQ8/G'),
-(102, 'Daniel', '','Gabriel', 'daniel@example.com', '2024-06-04T15:03:03.7992009700', '$2a$10$LUn5.yR9nChGEVFyjubjRuON6PgrhW7ZoQkMvZS/ajFWvf1KwQ8/G'),
+(101, '','John', 'Doe', 'johndoe@example.com', '2024-06-04T15:03:03.7992009700', '$2a$10$LUn5.yR9nChGEVFyjubjRuON6PgrhW7ZoQkMvZS/ajFWvf1KwQ8/G'),
+(102, '','Daniel', 'Gabriel', 'daniel@example.com', '2024-06-04T15:03:03.7992009700', '$2a$10$LUn5.yR9nChGEVFyjubjRuON6PgrhW7ZoQkMvZS/ajFWvf1KwQ8/G'),
 (103,'751dd93b-dc55-48b6-bfa2-8a5b7e804212','philip', 'daniel', 'ajibola@gmail.com', '2024-06-04T15:03:03.7992009700', '$2a$10$LUn5.yR9nChGEVFyjubjRuON6PgrhW7ZoQkMvZS/ajFWvf1KwQ8/G');
 
 

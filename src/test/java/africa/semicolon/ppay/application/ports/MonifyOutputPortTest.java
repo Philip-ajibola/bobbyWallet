@@ -1,6 +1,6 @@
-package africa.semicolon.ppay.application.service;
+package africa.semicolon.ppay.application.ports;
 
-import africa.semicolon.ppay.domain.service.MonifyUserService;
+import africa.semicolon.ppay.infrastructure.adapter.output.monifyAdapter.MonifyUserAdapter;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePaymentRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.AuthorizeRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.MonifyInitializeTransferDto;
@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
-class MonifyUserServiceTest {
+class MonifyOutputPortTest {
     @Autowired
-    private MonifyUserService monifyUserService;
+    private MonifyUserAdapter monifyUserAdapter;
 
     @Test
     void authenticate() {
-        MonifyAuthenticateResponse response = monifyUserService.authenticate();
+        MonifyAuthenticateResponse response = monifyUserAdapter.authenticate();
         assertNotNull(response);
         log.info("AuthenticationResponse: {}", response.getResponseBody().getAccessToken());
         assertThat(response.isRequestSuccessful()).isTrue();
@@ -45,7 +45,7 @@ class MonifyUserServiceTest {
         request.setCustomerEmail("ajibola@gmail.com");
         request.setCustomerName("Ajibola");
 
-        MonifyInitializePaymentResponse response = monifyUserService.initializePayment(request);
+        MonifyInitializePaymentResponse response = monifyUserAdapter.initializePayment(request);
         return response;
     }
 
@@ -56,7 +56,7 @@ class MonifyUserServiceTest {
         log.info("PaymentResponse: {}, {}", response.getResponseBody().getCheckoutUrl(),transactionReference);
 
         Thread.sleep(60000);
-        MonifyVerifyTransactionResponse verifyResponse = monifyUserService.verifyTransaction(transactionReference);
+        MonifyVerifyTransactionResponse verifyResponse = monifyUserAdapter.verifyTransaction(transactionReference);
 
         assertNotNull(verifyResponse);
         log.info("Verified transaction status {}, Amount paid {}",verifyResponse.isRequestSuccessful(),verifyResponse.getResponseBody().getAmountPaid());
@@ -79,7 +79,7 @@ class MonifyUserServiceTest {
         initializeTransferDto.setDestinationBankCode("999992");
 
 
-        MonifyInitializeTransferResponse response = monifyUserService.initializeTransfer(initializeTransferDto);
+        MonifyInitializeTransferResponse response = monifyUserAdapter.initializeTransfer(initializeTransferDto);
         return response;
     }
 
@@ -88,14 +88,14 @@ class MonifyUserServiceTest {
         AuthorizeRequest request = new AuthorizeRequest();
         request.setReference("BwB-1730158551431");
         request.setAuthorizationCode("450205");
-        AuthorizeTransactionResponse verifyResponse = monifyUserService.authorizeTransfer(request);
+        AuthorizeTransactionResponse verifyResponse = monifyUserAdapter.authorizeTransfer(request);
         assertNotNull(verifyResponse);
         log.info("Verified transfer status {}, Amount paid {}",verifyResponse.isRequestSuccessful(),verifyResponse.getResponseBody().getAmount());
         assertThat(verifyResponse.isRequestSuccessful()).isTrue();
     }
     @Test
     void testThatVerificationCanBeVerified(){
-        VerifyTransferResponse response = monifyUserService.verifyTransfer("BwB-1730158551431");
+        VerifyTransferResponse response = monifyUserAdapter.verifyTransfer("BwB-1730158551431");
 
         assertNotNull(response);
         log.info("Verified transfer status {}, Amount paid {},status: {}",response.isRequestSuccessful(),response.getResponseBody().getAmount(),response.getResponseBody().getStatus());

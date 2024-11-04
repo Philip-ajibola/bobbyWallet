@@ -4,6 +4,7 @@ import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewAllT
 import africa.semicolon.ppay.application.ports.input.userUseCase.*;
 import africa.semicolon.ppay.application.ports.input.walletUseCase.ChangeWalletPinUseCase;
 import africa.semicolon.ppay.application.ports.input.walletUseCase.CreateWalletUseCase;
+import africa.semicolon.ppay.application.ports.output.IdentityManagerOutputPort;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
 import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
@@ -26,13 +27,13 @@ import java.util.List;
 
 public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllTransactionUseCase, FindByIdUseCase,LoginUseCase, UpdateUserUseCase, DeleteUserUseCase, ExistByIdUseCase,ChangePinUseCase,ResetPasswordUseCase,GetAllUserUseCase {
     private final UserOutputPort userOutputPort;
-    private final KeycloakUserService keycloakUserService;
+    private final IdentityManagerOutputPort identityManagerOutputPort;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserOutputPort userOutputPort, KeycloakUserService keycloakUserService, PasswordEncoder passwordEncoder) {
+    public UserService(UserOutputPort userOutputPort, IdentityManagerOutputPort identityManagerOutputPort, PasswordEncoder passwordEncoder) {
         this.userOutputPort = userOutputPort;
-        this.keycloakUserService = keycloakUserService;
+        this.identityManagerOutputPort = identityManagerOutputPort;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -41,7 +42,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
         User user = findById(userId);
         String id = user.getKeyCloakId();
         userOutputPort.delete(userId);
-        keycloakUserService.deleteUser(id);
+        identityManagerOutputPort.deleteUser(id);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
 
     @Override
     public User createUser(User user, CreateWalletUseCase walletService) {
-        user = keycloakUserService.registerUser(user);
+        user = identityManagerOutputPort.registerUser(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
          user = userOutputPort.saveUser(user);
         Wallet wallet = walletService.createWallet(user.getId());
@@ -74,7 +75,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
             jsonNode = request.apply(jsonNode);
             user = objectMapper.convertValue(jsonNode, User.class);
             user = userOutputPort.saveUser(user);
-            keycloakUserService.updateUser(user);
+            identityManagerOutputPort.updateUser(user);
             return user;
 
         }catch (Exception e){
@@ -100,7 +101,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
 
     @Override
     public LoginResponse login(LoginRequest request) {
-       return keycloakUserService.login(request.getEmail(),request.getPassword());
+       return identityManagerOutputPort.login(request.getEmail(),request.getPassword());
     }
 
     @Override
@@ -114,7 +115,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
         User user = findById(request.getId());
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))throw new InvalidUserCredentials("Invalid User Credentials Provided");
         KeycloakResetPasswordRequest resetPasswordRequest = new KeycloakResetPasswordRequest(request.getNewPassword(),user.getEmail());
-        keycloakUserService.forgetPassword(resetPasswordRequest);
+        identityManagerOutputPort.forgetPassword(resetPasswordRequest);
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         user = userOutputPort.saveUser(user);
         return DtoMappers.INSTANCE.toUserResponse(user);
