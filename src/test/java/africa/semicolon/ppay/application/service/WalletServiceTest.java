@@ -2,11 +2,10 @@ package africa.semicolon.ppay.application.service;
 
 import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Wallet;
+import africa.semicolon.ppay.domain.service.WalletService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.*;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.CreateTransferRecipientResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.InitializePaymentResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.InitializeTransferResponse;
-import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.PaymentVerificationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

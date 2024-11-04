@@ -1,6 +1,6 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
-import africa.semicolon.ppay.application.service.PremblyIdentityVerificationService;
+import africa.semicolon.ppay.domain.service.PremblyIdentityVerificationService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyUserIdentityDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.application.service;
+package africa.semicolon.ppay.domain.service;
 
 import africa.semicolon.ppay.application.ports.input.paystackUseCase.*;
 import africa.semicolon.ppay.application.ports.output.PayStackPaymentOutputPort;
@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import static africa.semicolon.ppay.domain.constant.PayStackAPIConstant.*;
 import static africa.semicolon.ppay.infrastructure.utils.HelperClass.bufferReader;

@@ -1,5 +1,6 @@
 package africa.semicolon.ppay.application.service;
 
+import africa.semicolon.ppay.domain.service.MonifyUserService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePaymentRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.AuthorizeRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.MonifyInitializeTransferDto;
@@ -13,9 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.util.Predicates.isTrue;
 
 @SpringBootTest
 @Slf4j

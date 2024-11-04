@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.application.service;
+package africa.semicolon.ppay.domain.service;
 
 import africa.semicolon.ppay.application.ports.input.userUseCase.*;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
@@ -17,7 +17,6 @@ import africa.semicolon.ppay.infrastructure.adapter.input.mappers.DtoMappers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;

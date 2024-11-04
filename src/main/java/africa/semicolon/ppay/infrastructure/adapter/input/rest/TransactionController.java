@@ -1,7 +1,7 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
 import africa.semicolon.ppay.domain.model.Transaction;
-import africa.semicolon.ppay.application.service.TransactionService;
+import africa.semicolon.ppay.domain.service.TransactionService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.TransactionResponse;
 import africa.semicolon.ppay.infrastructure.adapter.input.mappers.DtoMappers;

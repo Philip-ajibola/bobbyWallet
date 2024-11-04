@@ -1,12 +1,11 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
-import africa.semicolon.ppay.application.service.MonifyUserService;
+import africa.semicolon.ppay.domain.service.MonifyUserService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.MonifyInitializePaymentRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.AuthorizeRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.MonifyInitializeTransferDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.ApiResponse;
 import jakarta.validation.Valid;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,5 +1,6 @@
 package africa.semicolon.ppay.application.service;
 
+import africa.semicolon.ppay.domain.service.PayStackPaymentService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.CreateTransferRecipientDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.InitializePaymentDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.InitializeTransferDto;

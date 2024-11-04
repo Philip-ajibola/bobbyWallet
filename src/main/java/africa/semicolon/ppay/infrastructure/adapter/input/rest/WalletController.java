@@ -1,7 +1,7 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
 import africa.semicolon.ppay.domain.model.Wallet;
-import africa.semicolon.ppay.application.service.WalletService;
+import africa.semicolon.ppay.domain.service.WalletService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.DepositDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.TransferDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.VerifyPaymentDto;

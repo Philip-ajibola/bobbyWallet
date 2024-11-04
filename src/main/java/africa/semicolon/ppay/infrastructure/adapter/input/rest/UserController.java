@@ -1,10 +1,10 @@
 package africa.semicolon.ppay.infrastructure.adapter.input.rest;
 
-import africa.semicolon.ppay.application.service.TransactionService;
+import africa.semicolon.ppay.domain.service.TransactionService;
 import africa.semicolon.ppay.domain.model.Transaction;
 import africa.semicolon.ppay.domain.model.User;
-import africa.semicolon.ppay.application.service.UserService;
-import africa.semicolon.ppay.application.service.WalletService;
+import africa.semicolon.ppay.domain.service.UserService;
+import africa.semicolon.ppay.domain.service.WalletService;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.ChangePinRequest;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.CreateUserDto;
 import africa.semicolon.ppay.infrastructure.adapter.input.dto.request.LoginRequest;
@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

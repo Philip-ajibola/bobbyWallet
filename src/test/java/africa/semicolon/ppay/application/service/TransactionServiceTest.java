@@ -3,6 +3,8 @@ package africa.semicolon.ppay.application.service;
 import africa.semicolon.ppay.domain.exception.TransactionNotFoundException;
 import africa.semicolon.ppay.domain.exception.WalletNotFoundException;
 import africa.semicolon.ppay.domain.model.Transaction;
+import africa.semicolon.ppay.domain.service.TransactionService;
+import africa.semicolon.ppay.domain.service.WalletService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

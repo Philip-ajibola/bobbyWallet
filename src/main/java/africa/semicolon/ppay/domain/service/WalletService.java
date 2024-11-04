@@ -1,4 +1,4 @@
-package africa.semicolon.ppay.application.service;
+package africa.semicolon.ppay.domain.service;
 
 import africa.semicolon.ppay.application.ports.input.walletUseCase.*;
 import africa.semicolon.ppay.application.ports.output.WalletOutputPort;
