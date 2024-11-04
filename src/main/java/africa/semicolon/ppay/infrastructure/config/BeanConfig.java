@@ -4,7 +4,7 @@ import africa.semicolon.ppay.application.ports.output.PayStackPaymentOutputPort;
 import africa.semicolon.ppay.application.ports.output.TransactionOutputPort;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
 import africa.semicolon.ppay.application.ports.output.WalletOutputPort;
-import africa.semicolon.ppay.application.service.*;
+
 import africa.semicolon.ppay.domain.service.*;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.PayStackPaymentEntityRepo;
 import africa.semicolon.ppay.infrastructure.adapter.output.persistence.repository.TransactionEntityRepo;

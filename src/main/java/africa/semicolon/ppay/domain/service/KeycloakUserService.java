@@ -187,6 +187,7 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
     }
 
 
+    @Override
     public User registerUser(User request) {
         CredentialRepresentation credentials = getCredentialRepresentation(request.getPassword());
         UserRepresentation user = getUserRepresentation(request, credentials);
@@ -232,6 +233,7 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
     }
 
 
+    @Override
     public LoginResponse login(String username, String password) {
         MultiValueMap<String, String> body = createClientRequest(username, password);
         HttpHeaders headers = new HttpHeaders();
@@ -292,6 +294,7 @@ public class KeycloakUserService implements RegisterUseCase, LoginUseCase, Delet
 
         userResource.resetPassword(getCredentialRepresentation(request.getPassword()));
     }
+    
     public void updateUser( User updatedUser) {
         System.out.println(updatedUser.getKeyCloakId());
         UserResource userResource = getUserResource().get(updatedUser.getKeyCloakId());

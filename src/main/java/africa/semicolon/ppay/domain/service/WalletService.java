@@ -15,14 +15,14 @@ import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 
 public class WalletService implements CreateWalletUseCase, DepositUseCase, FindByIdUseCase,
-        TransferUseCase, ExistByIdUseCase,ChangePinUseCase,VerifyTransferUseCase,VerifyPaymentUseCase {
+        TransferUseCase, ExistByIdUseCase, ChangeWalletPinUseCase,VerifyTransferUseCase,VerifyPaymentUseCase {
 
     private  PayStackPaymentService payStackPaymentService;
 
     private TransactionService transactionService;
     private final WalletOutputPort walletOutputPort;
 
-    public WalletService(WalletOutputPort walletOutputPort,TransactionService transactionService,PayStackPaymentService payStackPaymentService) {
+    public WalletService(WalletOutputPort walletOutputPort, TransactionService transactionService, PayStackPaymentService payStackPaymentService) {
         this.walletOutputPort = walletOutputPort;
         this.transactionService = transactionService;
         this.payStackPaymentService=payStackPaymentService;

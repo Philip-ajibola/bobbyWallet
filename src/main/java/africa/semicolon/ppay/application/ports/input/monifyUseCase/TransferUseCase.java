@@ -5,5 +5,5 @@ import africa.semicolon.ppay.infrastructure.adapter.input.dto.response.MonifyIni
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface TransferUseCase {
-    MonifyInitializeTransferResponse initializeTransfer(MonifyInitializeTransferDto dto) throws JsonProcessingException;
+    MonifyInitializeTransferResponse initializeTransfer(MonifyInitializeTransferDto dto) ;
 }

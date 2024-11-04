@@ -6,7 +6,6 @@ import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewASin
 import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewAllTransactionUseCase;
 import africa.semicolon.ppay.application.ports.output.TransactionOutputPort;
 import africa.semicolon.ppay.domain.model.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

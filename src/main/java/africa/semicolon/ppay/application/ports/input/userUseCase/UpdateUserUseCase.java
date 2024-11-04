@@ -5,5 +5,5 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 
 public interface UpdateUserUseCase {
-    User updateUser(Long id, JsonPatch request) throws JsonPatchException;
+    User updateUser(Long id, JsonPatch request) ;
 }

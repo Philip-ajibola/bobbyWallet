@@ -1,6 +1,9 @@
 package africa.semicolon.ppay.domain.service;
 
+import africa.semicolon.ppay.application.ports.input.transactionUseCase.ViewAllTransactionUseCase;
 import africa.semicolon.ppay.application.ports.input.userUseCase.*;
+import africa.semicolon.ppay.application.ports.input.walletUseCase.ChangeWalletPinUseCase;
+import africa.semicolon.ppay.application.ports.input.walletUseCase.CreateWalletUseCase;
 import africa.semicolon.ppay.application.ports.output.UserOutputPort;
 import africa.semicolon.ppay.domain.exception.InvalidUserCredentials;
 import africa.semicolon.ppay.domain.exception.PPayWalletException;
@@ -52,7 +55,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
     }
 
     @Override
-    public User createUser(User user,WalletService walletService) {
+    public User createUser(User user, CreateWalletUseCase walletService) {
         user = keycloakUserService.registerUser(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
          user = userOutputPort.saveUser(user);
@@ -86,7 +89,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
     }
 
     @Override
-    public User changePin(Long userId, String password, String newPin,WalletService walletService) {
+    public User changePin(Long userId, String password, String newPin, ChangeWalletPinUseCase walletService) {
         User user = userOutputPort.getUserById(userId);
         if(!passwordEncoder.matches(password,user.getPassword()))throw new PPayWalletException("Invalid Credential For THis User");
 
@@ -123,7 +126,7 @@ public class UserService implements CreateUserUseCase,FindByEmailUseCase,GetAllT
     }
 
     @Override
-    public List<Transaction> getAllTransactions(Long userId, TransactionService service) {
+    public List<Transaction> getAllTransactions(Long userId, ViewAllTransactionUseCase service) {
         if(!userOutputPort.existsById(userId)) throw new UserNotFoundException("User Not found");
         return service.viewAllTransactions(userId);
     }
